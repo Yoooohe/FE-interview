@@ -56,6 +56,10 @@ const target = {
     child: "child",
   },
   field4: [2, 4, 8],
+  field5: null,
+  field6: function () {
+    console.log("Hello");
+  },
 };
 target.target = target;
 // 我们会看到递归进入死循环导致内存溢出了
@@ -88,6 +92,7 @@ function cloneDeepWithRecursion(target, map = new Map()) {
   }
 }
 // 可以看到，执行没有报错，且target属性，变为了一个Circular类型，即循环应用的意思
+// 这里还有个问题，typeof null === "object" 会导致field5被拷贝成了{}
 
 // 4. WeakMap提代Map来使代码达到画龙点睛的作用
 function deepCloneFinal(obj, hash = new WeakMap()) {
@@ -99,7 +104,7 @@ function deepCloneFinal(obj, hash = new WeakMap()) {
   // 是对象的话就要进行深拷贝
   if (hash.get(obj)) return hash.get(obj);
   let cloneObj = new obj.constructor();
-  // 找到的是所属类原型上的constructor,而原型上的 constructor指向的是当前类本身
+  // 找到的是所属类原型上的constructor,而原型上的 constructor指向的是当前类本身，还可以保留继承关系
   hash.set(obj, cloneObj);
   for (let key in obj) {
     if (obj.hasOwnProperty(key)) {
@@ -109,6 +114,15 @@ function deepCloneFinal(obj, hash = new WeakMap()) {
   }
   return cloneObj;
 }
-const obj4 = deepCloneFinal(target);
+const obj4 = cloneDeepWithRecursion(target);
 
-console.log(obj4);
+console.log(obj4.field6());
+
+// 一些讨论 new obj.constructor() vs Object.create(target.constructor.prototype)
+// new obj.constructor()的一些小问题：
+// 新生成的对象虽然原型是继承了，但是构造函数也执行了，有一定的性能浪费，而且还很可能得到的不是一个空对象，后面又逐个替换属性，着实没必要。
+// 对于原生的构造函数，直接用 Object.create(target.constructor.prototype)，则会丢失其内部属性
+var map = new Map();
+var map2 = Object.create(map.constructor.prototype);
+var map3 = new map.constructor();
+// map2 和另外两个并不相同
