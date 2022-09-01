@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>测试JS任务执行顺序</title>
+    <style>
+      .outer {
+        width: 200px;
+        height: 200px;
+        background-color: brown;
+        cursor: pointer;
+      }
+      .inner {
+        width: 100px;
+        height: 100px;
+        background-color: blanchedalmond;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="outer">
+      <div class="inner"></div>
+    </div>
+    <script>
+      console.log("example 1 script start");
+      setTimeout(() => {
+        console.log("setTimeout --- outer1");
+        setTimeout(() => {
+          console.log("setTimeout -- inner");
+        }, 400);
+      }, 0);
+
+      setTimeout(() => {
+        console.log("setTimeout -- outer2");
+        Promise.resolve().then(() => {
+          console.log("promise -- inner");
+        }, 450);
+      }, 0);
+      console.log("example 1 script end");
+    </script>
+    <!-- example 1:
+      JS任务栈: setTimeout-outer1, setTimeout-outer2, setTimeout-inner
+      宏任务: promise-inner
+      微任务: script start, script end -->
+    <script>
+      console.log("example 2:");
+      const outer = document.querySelector(".outer");
+      const inner = document.querySelector(".inner");
+      function onClick() {
+        console.log("click", this);
+        setTimeout(() => {
+          console.log("setTimeout", this);
+        }, 0);
+        Promise.resolve().then(() => {
+          console.log("promise", this);
+        });
+      }
+      inner.addEventListener("click", onClick);
+      outer.addEventListener("click", onClick);
+      // 1. 点击inner，自动冒泡到outer，打印顺序如下
+      // click <div class="inner"></div>
+      // promise <div class="inner"></div>
+      // click <div class="outer"></div>
+      // promise <div class="outer"></div>
+      // setTimeout <div class="inner"></div>
+      // setTimeout <div class="outer"></div>
+      // tips: 通过UI交互触发的是异步宏任务～
+
+      inner.click();
+      // 2. 代码主动触发点击事件，也会自动冒泡到outer，打印顺序如下
+      // click <div class="inner"></div>
+      // click <div class="outer"></div>
+      // promise <div class="inner"></div>
+      // promise <div class="outer"></div>
+      // setTimeout <div class="inner"></div>
+      // setTimeout <div class="outer"></div>
+      // tips: 通过代码触发的是同步任务
+
+      // 如果这里的onClick用箭头函数则打印出来的this为window，因为箭头函数无this
+    </script>
+  </body>
+</html>
