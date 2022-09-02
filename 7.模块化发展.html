@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>前端模块化测试</title>
+  </head>
+  <body>
+    <div>这是一个前端模块化测试文件</div>
+    <!-- 引入的js必须有一定顺序 -->
+    <script src="http://libs.baidu.com/jquery/2.0.0/jquery.js"></script>
+    <script type="text/javascript" src="7.模块化发展.js"></script>
+    <script type="text/javascript">
+      console.log("----IIFE 无依赖测试----");
+      myModule2.foo();
+      myModule2.bar();
+      console.log(myModule2.data); //undefined 不能访问模块内部数据
+      myModule2.data = "xxxx"; //不是修改的模块内部的data
+      myModule2.foo(); //没有改变
+      console.log("----IIFE 依赖jquery测试----");
+      myModule3.foo();
+    </script>
+  </body>
+</html>
