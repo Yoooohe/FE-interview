@@ -7,14 +7,23 @@ const addX = function (value) {
 // module.exports.addX = addX;
 
 var counter = 3;
+var obj = {
+  counter: 3,
+};
 const addCounter = () => {
   counter++;
+  obj.counter++;
 };
 const getCounter = () => {
   return counter;
 };
+const getObjCounter = () => {
+  return obj.counter;
+};
 module.exports = {
   counter,
+  obj,
   addCounter,
   getCounter,
+  getObjCounter,
 };
