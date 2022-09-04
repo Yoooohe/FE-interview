@@ -1,4 +1,4 @@
-import { counter, addCounter } from "./lib";
+import { counter, addCounter } from "./addCounter";
 import { foo, bar } from "./module1";
 import { fun1, fun2 } from "./module2";
 import module3 from "./module3";

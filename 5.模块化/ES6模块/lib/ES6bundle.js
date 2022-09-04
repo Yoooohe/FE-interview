@@ -1,7 +1,7 @@
 (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
 "use strict";
 
-var _lib = require("./lib");
+var _addCounter = require("./addCounter");
 
 var _module = require("./module1");
 
@@ -17,9 +17,11 @@ var _jquery2 = _interopRequireDefault(_jquery);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-console.log(_lib.counter); // 3
-(0, _lib.addCounter)();
-console.log(_lib.counter); // 4
+// 第三方库的引入
+
+console.log(_addCounter.counter); // 3
+(0, _addCounter.addCounter)();
+console.log(_addCounter.counter); // 4
 // ES6模块的运行机制与CommonJS不一样。
 // ES6 模块是动态引用，并且不会缓存值，模块里面的变量绑定其所在的模块。
 
@@ -32,8 +34,8 @@ console.log(_lib.counter); // 4
 
 // 该文件无法在直接运行，需要对ES6进行编译
 // 使用Babel将ES6编译为ES5代码(但包含CommonJS语法):  babel ./ -d lib
-// 使用Browserify编译js : browserify lib/ES模块.js -o lib/ESbundle.js
-},{"./lib":2,"./module1":3,"./module2":4,"./module3":5,"jquery":6}],2:[function(require,module,exports){
+// 使用Browserify编译js : browserify lib/ES6模块.js -o lib/ES6bundle.js
+},{"./addCounter":2,"./module1":3,"./module2":4,"./module3":5,"jquery":6}],2:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {

@@ -6,4 +6,16 @@
   <div>ES6模块测试</div>
   <!-- <script src="./lib/ES6模块.js"></script> -->
   <script src="./lib/ES6bundle.js"></script>
+  <!-- <script type="module">
+    import { counter } from "./addCounter.js";
+    console.log(counter);
+  </script>
+  <script nomodule>
+    alert("您的浏览器暂不支持 ES 模块，请先升级浏览器版本");
+  </script> -->
+
+  <!-- 在浏览器中使用 ES 模块化, 
+只需要在 script 标签中添加 type="module" 属性就行，
+目前各大浏览器较新版本都已支持，
+如果是不支持的浏览器通过添加 nomodule 属性来执行其他方案 -->
 </html>
