@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    #container {
+      width: 200px;
+      height: 200px;
+      border-radius: 5px;
+      background-color: purple;
+    }
+    /* 40*4+8*5=200 */
+    #container > div{
+      width: 40px;
+      height: 40px;
+      background-color: #fff;
+      margin-top: 8px;
+      margin-left: 8px;
+      float: left;
+      border-radius: 4px;
+      line-height: 40px;
+      text-align: center;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div id="container"></div>
+  <script>
+    (function(){
+      var arr = [
+        [0, 0, 0, 0],
+        [0, 0, 0, 0],
+        [0, 0, 0, 0],
+        [0, 0, 0, 0],
+      ]
+      // 动态生成4*4表格，每个表格中有坐标(0,0) - (3，3）点击格增加次数，
+      // 且每个格互不干扰，次数通过弹窗显示 - 看到互不干扰要首先想到闭包！
+      var div = document.getElementById("container");
+      // 动态为div添加16个子div
+      for(var r = 0; r < 4; r++){ // 外层控制行号
+        for(var c = 0; c < 4; c++) { // 内层控制列号
+          var cell = document.createElement("div"); 
+          cell.innerHTML = `(${r},${c})`
+          div.appendChild(cell);
+          // 方案1: 直接给每个格子添加单击事件处理函数，每个处理函数来自于一个闭包的外层函数调用的返回值
+          // 且闭包保存了一个变量n，记录当前格子的点击次数
+          // cell.onclick = (function(){
+          //   var n = 0;
+          //   return function(){
+          //     n++;
+          //     alert(`点击了${n}次`)
+          //   }
+          // })()
+          
+          // 方案2: 今后只要看到二维布局， 2048或消消乐，都应该用二维数组来存储所有格子的值。
+          // 每个按钮的单击事件处理函数中应该只保存自己对应的元素的下标位置。
+          // 当点击时，通过自己保存的行号和列号来找到二维数组中自己对应的元素值，修改。
+          cell.onclick = (function(r, c){
+            return function(){
+              arr[r][c]++;
+              alert(`点击了${arr[r][c]}次`)
+            }
+          })(r, c) // 将外层循环过程中的r和c的值，传入妈妈函数中。保存到妈妈函数的局部变量r和c中
+
+          // 方案3: 由于arr时全局变量，非常容易被修改。我们可以将整个script变成匿名自执行函数
+          // arr就变成了局部变量，会被内层函数引用着，不会释放。但是外部也不能擅自修改了！
+        }
+      }
+    })()
+  </script>
+</body>
+</html> 

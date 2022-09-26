@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=<device-width>, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    // 要求定义函数add，实现alert(add(1)(2)(3))
+    // 函数柯里化：可以连续给一个函数，反复传参，反复传的参数，还能累计到函数内
+    var add = function(x1) {
+      var sum = x1 // 先把第一个()中的1保存进局部变量sum中
+      var fun = function(x2) { // 定义内层函数，能够将第二个()中的2，累加到变量sum上
+        sum += x2;
+        return fun; // 因为函数柯里化要求，能够连续给一个函数传参数。座椅，应该返回继续返回当前的函数对象。
+      }
+      fun.toString = function() { // 必须为fun的toString方法
+        return sum;
+      }
+      return fun // 为了可以传入第二个参数
+    }
+    alert(add(1)(2)(3))
+    alert(add(2)(4)(6))
+  </script>
+</body>
+</html>
