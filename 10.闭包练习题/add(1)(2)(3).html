@@ -23,6 +23,10 @@
     }
     alert(add(1)(2)(3))
     alert(add(2)(4)(6))
+    // 这个题目必须用alert调用，因为alert再输出时必须以文本形式，因此会自动调用toString
+    // 如果希望使用console.log，则我们需要手动调用如下
+    // fun.getSum = function(){return sum}
+    // console.log(add(1)(2)(3).getSum())
   </script>
 </body>
 </html>
