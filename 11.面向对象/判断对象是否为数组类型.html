@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+  <script>
+    // 判断一个对象是否为数组类型，一共有几种类型
+    // 不正确的方法：typeof
+
+    // 补充一个知识点：typeof null === 'object'的原因：
+    // 这是因为它通常用于释放一个变量对于对象的引用。
+    // 我们在创建对象时，变量名存放的是一个对象的地址，这个地址指向一个实实在在的对象。
+    // null经常用来打断引用，代替这个变量中的对象的地址，让这个变量不在引用原来的对象。
+    // 所以这个null也被认为是一个特殊的空地址，也就是一个哪也不指向的地址。
+    // 所以从用法上来说，null更像是一个没有意义的对象object。
+
+    // typeof可以判断基本数据类型中的number, string, boolean, undefined
+    // typeof也可以判断function
+    // typeof不能判断引用数据类型的具体类型，它只能告诉你是object类型
+
+    var obj1 = {};
+    var obj2 = [1, 2, 3];
+    var obj3 = new Date();
+
+    // 一、判断爹：3种 - 爸爸是原型对象
+    // 1. __proto__获得对象的爹，然后再和数组的爹做比较
+    console.log(
+      obj1.__proto__ === Array.prototype,
+      obj2.__proto__ === Array.prototype,
+      obj3.__proto__ === Array.prototype
+    );
+    // 2. 因为__proto__可能会被浏览器禁用，
+    // 所以有等效的函数来完成__proto的任务：Object.getPrototypeOf(child)
+
+    // 3. 还有一个更直接的函数: father.isPrototypeOf(child)
+    console.log(
+      Array.prototype.isPrototypeOf(obj1),
+      Array.prototype.isPrototypeOf(obj2),
+      Array.prototype.isPrototypeOf(obj3)
+    );
+
+    // 二、判断妈妈 2种 - 妈妈是构造函数
+    // 4. 用父级原型对象中的constructor属性
+    console.log(
+      obj1.constructor === Array,
+      obj2.constructor === Array,
+      obj3.constructor === Array
+    );
+    // 实例对象obj身上没有constructor，
+    // 它顺着__proto__找到了它原型对象上的constructor，
+    // 这个属性指向了它的构造函数
+
+    // 5. 用"child instanceof 妈妈" -> 返回boolean
+    console.log(
+      obj1 instanceof Array,
+      obj2 instanceof Array,
+      obj3 instanceof Array
+    );
+
+    // 以上方法都存在一点瑕疵，
+    // 如果我们强行将一个实例对象的__proto__指向Array.prototype，
+    // 那么这个继承关系就被修改了
+    obj1.__proto__ = Array.prototype;
+    console.log(
+      obj1 instanceof Array,
+      obj2 instanceof Array,
+      obj3 instanceof Array
+    );
+    // 6. 输出对象中的DNA：内部隐藏属性class
+    // 无法通过.访问，也无法修改
+    // 想要看到这个class属性，
+    // 需要想办法获取到顶级父对象中的toString得到的"[Object 类型名]"
+    // 第二个部分就是class属性值
+    console.log(obj1.toString(), obj2.toString(), obj3.toString());
+    // 但是数组和日期都重写了自己的toString，那么怎们办呢？
+    // .call()可以让任何一个对象，抢到原本不属于它的任何一个函数
+    console.log(
+      Object.prototype.toString.call(obj1) === "[object Array]",
+      Object.prototype.toString.call(obj2) === "[object Array]",
+      Object.prototype.toString.call(obj3) === "[object Array]"
+    );
+    // 所以上述方法是判断任意类型最可靠的方法！
+
+    // 7. ES5中新增了一个专门判断一个对象是不是数组的函数
+    // Array.isArray(obj) -> boolean
+    console.log(Array.isArray(obj1), Array.isArray(obj2), Array.isArray(obj3));
+    // 我们发现它也没有受到修改__proto__的影响，它的内部其实封装的就是方法6
+
+    // 共7种
+  </script>
+</html>
