@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+  <script>
+    function Foo() {
+      getName = function () {
+        console.log(1);
+      };
+      return this;
+    }
+    Foo.getName = function () {
+      console.log(2);
+    };
+    Foo.prototype.getName = function () {
+      console.log(3);
+    };
+    var getName = function () {
+      console.log(4);
+    };
+    function getName() {
+      console.log(5);
+    }
+    // 首先我们考虑全局的两个getName，这个地方涉及的就是声明提前。
+    // 所谓声明提前，就是把var声明的变量和function声明的函数提前到顶部
+    // 由于var声明的函数和function声明的函数在都是相同的，所以后面的会把前面的覆盖掉。
+    // 这个时候全局的是打印5的getName
+    // 由于仅仅var这个声明被提前了，但是赋值还在原地，所以全局window下，打印4的getName再次覆盖打印5的。
+    Foo.getName(); // 2 -> Foo这个函数对象下的getName
+    getName(); // 4 -> 全局对象window下的getName
+    Foo().getName(); // 1 -> Foo函数执行后，内部的getName由于没有var，所以实际是全局变量，因此再次覆盖全局打印4的getName，而返回的this指向window，因此执行的是全局对象window下打印1的新getName
+    getName(); // 1 -> 全局对象windo下的getName
+    // new要求向后读到第一个圆括号的为止，组成创建对象的语法
+    new Foo.getName(); // 2 -> Foo这个函数对象下的getName
+    // new找到的最近的圆括号是Foo后面的，所以创建了一个Foo的实例，由于该实例上没有getName，就找到了它原型对象上的getName，即打印3的getName
+    new Foo().getName(); // 3 -> Foo原型对象上的getName
+    // new在执行时发现里面还有一个new就会进行断句，形成new new Foo() .getName() -> new Foo的实例对象.getName() -> 执行的还是实例对象下的getName，同样因为实例对象没有getName，使用的是其原型对象下的getName
+    new new Foo().getName(); // 3 -> Foo原型对象上的getName
+  </script>
+</html>
