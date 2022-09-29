@@ -34,5 +34,10 @@
     new Foo().getName(); // 3 -> Foo原型对象上的getName
     // new在执行时发现里面还有一个new就会进行断句，形成new new Foo() .getName() -> new Foo的实例对象.getName() -> 执行的还是实例对象下的getName，同样因为实例对象没有getName，使用的是其原型对象下的getName
     new new Foo().getName(); // 3 -> Foo原型对象上的getName
+
+    // 总结一下知识点吧 ！！！
+    // 1. 声明提前：function(){}整体提前，var 变量 = xxx，仅支持var 变量提前，= xxx 留在原地
+    // 2. 任何函数都是普通的对象，也可以添加自己的属性。添加的属性和函数体内部的毫无关系。
+    // 3. 任何函数都可以当作构造函数被new调用，且任何函数都有prototype属性。只不过，大部分的函数不是标准的构造函数内容而已。
   </script>
 </html>
