@@ -132,6 +132,7 @@ class MyPromise {
     let count = 0;
     return new MyPromise((resolve, reject) => {
       const addData = (index, value) => {
+        // result中接到返回值的顺序 与 all中异步函数的顺序一致，与之行结束的先后顺序无关
         result[index] = value;
         count++;
         if (count === promiseList.length) {
