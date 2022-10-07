@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <button onclick="getLocation()">点击获取地理位置1</button>
+    <div id="demo"></div>
+    <script>
+      var x = document.getElementById("demo");
+      function getLocation() {
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(showPosition, showError);
+        } else {
+          showError();
+        }
+      }
+      function showPosition(position) {
+        x.innerHTML =
+          "Latitude: " +
+          position.coords.latitude +
+          "<br/> Longitude: " +
+          position.coords.longtitude;
+      }
+
+      function showError(error) {
+        x.innerHTML = `GeoLocation is not supported by current navigator ${
+          error ? error.message : ""
+        }`;
+      }
+    </script>
+  </body>
+</html>
