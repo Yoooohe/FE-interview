@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+  <!-- 懒加载是一种延迟加载技术，在一个长网页中存在大量图片影响加载速度和用户体验。 -->
+  <!-- 懒加载是一种优化网页性能的方式。大量用在电商场景中。 -->
+  <body>
+    <img
+      src=""
+      style="height: 200px; width: 200px"
+      class="image-item"
+      lazyload="true"
+      data-src="https://pic.qqtn.com/up/2019-9/15690311636958128.jpg"
+    />
+  </body>
+  <script>
+    let viewHeight = window.innerHeight || document.body.clientHeight;
+    function lazyload() {
+      var imgList = document.querySelectorAll("img[data-src][lazyload]");
+      imgList.forEach((imgItem) => {
+        if (!imgItem.dataset.src) return;
+        // 获得图片相对浏览器视窗的位置
+        let rect = imgItem.getBoundingClientRect();
+        if (rect.bottom >= 0 && rect.top < viewHeight) {
+          let img = new Image();
+          img.src = imgItem.dataset.src;
+          img.onload = function () {
+            imgItem.src = img.src;
+          };
+          imgItem.removeAttribute("data-src");
+          //移除属性，下次不再遍历
+          imgItem.removeAttribute("lazyload");
+        }
+      });
+    }
+
+    function throttle(fn, wait = 500) {
+      let timeout;
+      return function (...args) {
+        if (timeout) return;
+        timeout = setTimeout(() => {
+          fn.apply(this, args);
+          clearTimeout(timeout);
+        }, wait);
+      };
+    }
+
+    lazyload(); //刚开始还没滚动屏幕时，要先触发一次函数，初始化首页的页面图片
+    window.addEventListener("scroll", throttle(lazyload));
+  </script>
+</html>

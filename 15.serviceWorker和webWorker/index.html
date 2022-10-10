@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <h1>WebWorker: <span id="c1"></span></h1>
+    <h1>ServiceWorker: <span id="c2"></span></h1>
+  </body>
+  <script>
+    const c1 = document.getElementById("c1");
+    const worker = new Worker("./webworker.js");
+    const msg = "hello";
+    console.log("page send: " + msg);
+    worker.postMessage(msg);
+    worker.onmessage = (e) => {
+      c1.textContent = e.data;
+    };
+
+    if ("serviceWorker" in window.navigator) {
+      const c2 = document.getElementById("c2");
+      navigator.serviceWorker
+        /* scope 参数是可选的，可以用来指定你想让 service worker 控制的内容的子目录。 在这个例子里，我们指定了 '/'，表示 根网域下的所有内容。这也是默认值。 */
+        .register("./serviceworker.js", { scope: "./" })
+        .then(function (reg) {
+          console.log("success", reg);
+          const sw = reg.active;
+          sw.postMessage("hello service worker");
+        })
+        .catch(function (err) {
+          console.log("ServiceWorker registration failed: ", err);
+        });
+
+      navigator.serviceWorker.onmessage = (e) => {
+        c2.textContent = e.data;
+      };
+      // ...
+    }
+  </script>
+  <script src="./delay.js"></script>
+</html>

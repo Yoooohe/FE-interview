@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+  <div id="app">
+    水果
+    <!-- 注释 -->
+    <p>
+      西瓜
+      <span style="display: none">瓜子</span>
+    </p>
+  </div>
+
+  <script>
+    const app = document.getElementById("app");
+    console.log(app.nodeValue); // null
+    console.log(app.childNodes[0].nodeValue); // 水果
+    console.log(app.childNodes[1].nodeValue); // 注释
+
+    console.log(app.innerHTML);
+    console.log(app.innerText);
+    console.log(app.textContent);
+  </script>
+</html>
