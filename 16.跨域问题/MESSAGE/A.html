@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <h1>A</h1>
+    <iframe
+      id="iframe"
+      src="http://127.0.0.1:1002/B.html"
+      frameborder="0"
+      style="display: none"
+    ></iframe>
+  </body>
+  <script>
+    iframe.onload = function () {
+      console.log(iframe.contentWindow);
+      iframe.contentWindow.postMessage("Hello B!", "http://127.0.0.1:1002");
+    };
+    // =》监听B传递的消息
+    window.onmessage = function (e) {
+      console.log(e.data);
+    };
+  </script>
+</html>

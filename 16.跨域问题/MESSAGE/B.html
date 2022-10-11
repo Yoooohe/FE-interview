@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <h1>B</h1>
+  </body>
+  <script>
+    window.onmessage = function (e) {
+      console.log(e.data);
+      e.source.postMessage("Hello A!", e.origin);
+    };
+  </script>
+</html>

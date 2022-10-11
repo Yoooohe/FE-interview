@@ -1,0 +1,28 @@
+<!-- 让A走1001 -->
+<!DOCTYPE html>
+<html>
+  <body>
+    <h1>A</h1>
+    <iframe
+      src="http://127.0.0.1:1002/B.html"
+      id="iframe"
+      style="display: none"
+    ></iframe>
+  </body>
+  <script>
+    let count = 0;
+    iframe.onload = function () {
+      // console.log(iframe.contentWindow.name);
+      // 会报跨域错误，因为iframe的src还指向1002
+      // 需要我们先把地址重新指向同源才可以
+      if (count === 0) {
+        iframe.src = "http://127.0.0.1:1001/proxy.html";
+        count++;
+        // 这里使用count的原因是因为iframe会在window加载的时候加载一次，
+        // 更改src会再次触发load，会造成无限次触发
+      } else {
+        console.log(iframe.contentWindow.name);
+      }
+    };
+  </script>
+</html>
