@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hello Webpack</title>
+  </head>
+  <body></body>
+  <script>
+    // webpack原理解析：
+    // 制造一个结构体list，实现根据文件传入不同的可执行code
+    (function (list) {
+      // 模拟一个require函数 index.js, add.js
+      function require(file) {
+        var exports = {};
+        // 解决导出模块函数问题 - 自运行函数, 为了防止add.js等文件中的变量污染全局
+        (function (exports, code) {
+          eval(code);
+        })(exports, list[file]);
+        return exports;
+      }
+      require("index.js"); // 入口
+    })({
+      // 结构体list
+      "add.js": `exports.default = function(a, b){ return a+ b }`,
+      "index.js": `var a = require("./add.js").default; console.log(add(1, 2));`,
+    });
+    // 以上就是bundle.js的原型
+    // webpack原理其实就是想办法用后端的nodeJs语言把上面的这个原型拼装出来，搞出来一个依赖图
+
+    // 总结一下：
+    // 1. 我们把两个文件的代码挪到html里面得到
+    // exports.default = function(a,b){ return a + b }
+    // var add = require("add.js").default
+
+    // 2. 在浏览器端我们并没有exports对象，所以知道一个并把add文件中的函数变成string传入
+    // var exports = {}
+    // eval("exports.default = function(a,b){ return a + b }")
+    // var add = require("add.js").default
+
+    // 3. 为了防止全局污染，我们将eval放到一个自执行函数中
+    // 4. 提供一个require函数
+    // 5. 传入一个结构体list
+
+    // webpack解析过程：
+    // 从入口文件开始读取，收集依赖，把对应的代码填写进去，生成和结构体
+    // 提供替换的require与exports
+  </script>
+</html>
