@@ -62,7 +62,7 @@ const sum = (...args1) => {
     return fn;
   };
   fn.toString = () => {
-    console.log(sumNum);
+    return sumNum;
   };
   return fn;
 };
