@@ -51,3 +51,31 @@ console.log("3.兼容多参数情况");
 console.log(fn3(1)(2)(3).val);
 console.log(fn3(1)(2, 3).val);
 console.log(fn3(1).val);
+
+let helper = (nums) => {
+  return nums.reduce((acc, cur) => acc + cur, 0);
+};
+const sum = (...args1) => {
+  let sumNum = helper(args1);
+  const fn = (...args2) => {
+    sumNum += helper(args2);
+    return fn;
+  };
+  fn.toString = () => {
+    console.log(sumNum);
+  };
+  return fn;
+};
+
+const sum2 = (...args1) => {
+  let sumNum = helper(args1);
+  const fn = (...args2) => {
+    if (args2.length) {
+      sumNum += helper(args2);
+      return fn;
+    } else {
+      return sumNum;
+    }
+  };
+  return args1.length ? fn : sumNum;
+};
