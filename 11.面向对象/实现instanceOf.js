@@ -10,3 +10,16 @@ function myInstanceof(left, right) {
     left = left.__proto__;
   }
 }
+
+function myInstanceof2(target, origin) {
+  if (typeof target !== "object" || target === null) return false;
+  if (typeof origin !== "functoin") {
+    throw new TypeError("origin must be function");
+  }
+  let proto = Object.getPrototypeOf(target);
+  while (proto) {
+    if (proto === origin.prototype) return true;
+    proto = Object.getPrototypeOf(proto);
+  }
+  return false;
+}
