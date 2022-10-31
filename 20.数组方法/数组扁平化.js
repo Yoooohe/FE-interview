@@ -19,4 +19,17 @@ const flatten1 = (arr) => {
   }
   return arr;
 };
+
+const flattenArr2 = (arr) => {
+  const res = arr.reduce((acc, cur) => {
+    if (Array.isArray(cur)) {
+      acc = acc.concat(flattenArr(cur));
+    } else {
+      acc.push(cur);
+    }
+    return acc;
+  }, []);
+  return res;
+};
+
 console.log(flatten1([1, 2, 3, [4, [5, 6]], 7]));
